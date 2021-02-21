@@ -1,11 +1,15 @@
 <template>
   <div class="register-container">
     <div class="register-box">
-      <el-menu default-active="1" class="el-menu-demo" mode="horizontal"
-               background-color="#3c3b3722" text-color="#fff" active-text-color="#409EFF" @select="isCandidate=!isCandidate">
-        <el-menu-item index="1">应聘者注册</el-menu-item>
-        <el-menu-item index="2">公司注册</el-menu-item>
-      </el-menu>
+      <!-- 头像区域 -->
+      <div class="avatar-box">
+        <img src="../assets/images/logo.png" alt="">
+
+      </div>
+      <el-radio-group v-model="isCandidate" class="choose">
+        <el-radio class="find-job" :label="true">我要找工作</el-radio>
+        <el-radio class="new-job" :label="false">我要招聘</el-radio>
+      </el-radio-group>
       <el-form v-if="isCandidate" ref="registerFormRef" :model="registerForm" :rules="registerFormRules"
                label-width="0px"
                class="register-form">
@@ -24,8 +28,10 @@
         </el-form-item>
         <!-- 性别 -->
         <el-form-item prop="gender">
-          <el-radio v-model="registerForm.gender" label="男">男</el-radio>
-          <el-radio v-model="registerForm.gender" label="女">女</el-radio>
+          <el-select v-model="registerForm.gender">
+            <el-option label="我是男生" value="男"></el-option>
+            <el-option label="我是女生" value="女"></el-option>
+          </el-select>
         </el-form-item>
         <!-- 手机 -->
         <el-form-item prop="phone">
@@ -45,16 +51,19 @@
               placeholder="选择生日">
           </el-date-picker>
         </el-form-item>
-        <el-form-item>
-          <div>
-            <el-button class="register-btn" type="info" @click="resetRegisterForm">重置</el-button>
-            <el-button class="register-btn" type="primary" @click="$router.push('/login')">登录</el-button>
-          </div>
-          <el-divider></el-divider>
-          <div>
-            <el-button class="register-btn-im" type="primary" @click="register">注册</el-button>
-          </div>
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="7">
+            <!-- 登录区域 -->
+            <el-button type="text" class="login" @click="$router.push('/login')">已有账号，登录</el-button>
+          </el-col>
+          <el-col :span="17">
+            <!-- 按钮区域 -->
+            <el-form-item class="btns">
+              <el-button type="primary" @click="register">注册</el-button>
+              <el-button type="info" @click="resetRegisterForm">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <el-form v-if="!isCandidate" ref="registerFormRef" :model="registerForm" :rules="registerFormRules"
                label-width="0px"
@@ -68,16 +77,19 @@
           <el-input v-model="registerForm.password" prefix-icon="el-icon-user" type="password"
                     placeholder="请输入密码"></el-input>
         </el-form-item>
-        <el-form-item>
-          <div>
-            <el-button class="register-btn" type="info" @click="resetRegisterForm">重置</el-button>
-            <el-button class="register-btn" type="primary" @click="$router.push('/login')">登录</el-button>
-          </div>
-          <el-divider></el-divider>
-          <div>
-            <el-button class="register-btn-im" type="primary" @click="">注册</el-button>
-          </div>
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="7">
+            <!-- 注册区域 -->
+            <el-button type="text" class="login" @click="$router.push('/login')">已有账号，登录</el-button>
+          </el-col>
+          <el-col :span="17">
+            <!-- 按钮区域 -->
+            <el-form-item class="btns">
+              <el-button type="primary" @click="register">登录</el-button>
+              <el-button type="info" @click="resetRegisterForm">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
   </div>
@@ -191,8 +203,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+// scoped 代表样式只在当前文件生效
 .register-container {
-  background-image: url("../assets/images/register_background.jpg");
+  background-image: url("../assets/images/login_back.jpg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
@@ -200,19 +213,61 @@ export default {
 }
 
 .register-box {
-  width: 260px;
-  height: 450px;
+  width: 500px;
+  height: 600px;
+  background-color: #fff;
   border-radius: 3px;
   position: absolute;
-  left: 71%;
-  top: 40%;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(147, 145, 145, 0.1);
+
+  .avatar-box {
+    height: 130px;
+    width: 130px;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 0 10px #ddd;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    background-color: #fff;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #eee;
+    }
+  }
+}
+
+.choose {
+  width: 100%;
+
+  .find-job {
+    float: left;
+    margin-left: 30px;
+    margin-top: 50px;
+  }
+
+  .new-job {
+    float: right;
+    margin-right: 30px;
+    margin-top: 50px;
+  }
+}
+
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .register-form {
   position: absolute;
-  margin-top: 10px;
+  bottom: 0;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
@@ -222,13 +277,8 @@ export default {
   }
 }
 
-.register-btn {
-  background-color: unset !important;
-  width: 105px;
-}
-
-.register-btn-im {
-  background-color: unset !important;
-  width: 220px;
+.login {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

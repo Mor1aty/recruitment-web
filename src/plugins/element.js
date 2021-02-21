@@ -14,7 +14,10 @@ import {
     DatePicker,
     Divider,
     Menu,
-    MenuItem
+    MenuItem,
+    RadioGroup,
+    Container,
+    Header
 } from 'element-ui'
 
 Vue.use(Button)
@@ -31,5 +34,8 @@ Vue.use(DatePicker)
 Vue.use(Divider)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(RadioGroup)
+Vue.use(Container)
+Vue.use(Header)
 
 Vue.prototype.$message = Message
