@@ -17,7 +17,14 @@ import {
     MenuItem,
     RadioGroup,
     Container,
-    Header
+    Header,
+    Carousel,
+    CarouselItem,
+    Card,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    Dialog
 } from 'element-ui'
 
 Vue.use(Button)
@@ -37,5 +44,12 @@ Vue.use(MenuItem)
 Vue.use(RadioGroup)
 Vue.use(Container)
 Vue.use(Header)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+Vue.use(Card)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Dialog)
 
 Vue.prototype.$message = Message

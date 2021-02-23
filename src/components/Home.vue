@@ -58,7 +58,6 @@ export default {
 <style scoped lang="less">
 .home-container {
   height: 100%;
-  background-color: rgb(246, 246, 248);
 
   .el-header {
     background-color: rgb(32, 35, 41);
