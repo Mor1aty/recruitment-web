@@ -3,15 +3,26 @@
     <el-header>
       <div class="header-elem">
         <span class="logo-font">招聘管理系统</span>
-        <el-button type="text" icon="el-icon-map-location" class="location">{{ location }}</el-button>
         <el-button type="text" class="index" :style="indexShow===true?'color:rgb(93, 213, 200);':'color:white'"
                    @click="pushNext('/home/index','index')">首页
         </el-button>
         <el-button type="text" class="company" :style="companyShow===true?'color:rgb(93, 213, 200);':'color:white'"
                    @click="pushNext('/home/company', 'company')">公司
         </el-button>
-        <el-button round type="success" size="mini" class="register" @click="pushNext('/register')">注册</el-button>
-        <el-button round type="success" size="mini" class="login" @click="pushNext('/login')">登录</el-button>
+        <el-button v-if="!isLogin" round type="success" size="mini" class="register" @click="pushNext('/register')">注册
+        </el-button>
+        <el-button v-if="!isLogin" round type="success" size="mini" class="login" @click="pushNext('/login')">登录
+        </el-button>
+        <el-dropdown v-if="isLogin" @command="handleCommand" class="register">
+        <span class="el-dropdown-link">
+          <span>{{ this.user.info.name }} ({{ this.user.account }})</span>
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="resume">在线简历</el-dropdown-item>
+            <el-dropdown-item command="logout">注销</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </el-header>
     <el-container>
@@ -28,10 +39,14 @@ export default {
       location: '全国 [切换城市]',
       indexShow: true,
       companyShow: false,
+      isLogin: false,
+      type: -1,
+      user: {}
     }
   },
   created() {
     this.$router.push('/home/index')
+    this.checkLogin()
   },
   methods: {
     pushNext(next, show) {
@@ -50,7 +65,32 @@ export default {
             break
         }
       }
-    }
+    },
+    checkLogin() {
+      if (window.sessionStorage.getItem('user') == null) {
+        this.isLogin = false
+        return
+      }
+      this.user = JSON.parse(window.sessionStorage.getItem('user'))
+      this.type = window.sessionStorage.getItem('type')
+      this.isLogin = true
+    },
+    // 用户信息操作
+    async handleCommand(command) {
+      if (command === 'logout') {
+        const {data: res} = await this.$http.post('user/logout')
+        if (res.code !== 200) this.$message.error(res.msg)
+        this.$message.success(res.msg)
+        window.sessionStorage.clear()
+        this.type = -1
+        this.user = {}
+        this.isLogin = false
+        await this.$router.push('/home/index')
+      }
+      if (command === 'resume') {
+        await this.$router.push('/home/candidateInfo')
+      }
+    },
   }
 }
 </script>

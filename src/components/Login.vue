@@ -111,7 +111,7 @@ export default {
         this.$message.success('登录成功')
         window.sessionStorage.setItem('user', JSON.stringify(res.data))
         window.sessionStorage.setItem('type', this.loginForm.type)
-        window.sessionStorage.setItem('token', res.data.token)
+        window.sessionStorage.setItem('token', res.data.tokenCode)
         await this.$router.push('/home')
       })
     }

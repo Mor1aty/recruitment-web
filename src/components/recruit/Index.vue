@@ -1,74 +1,76 @@
 <template>
-  <div class="index-container">
-    <el-carousel :interval="4000" type="card" v-show="bannerShow">
-      <el-carousel-item v-for="item in banners" :key="item.id">
-        <img :src="item.url" alt="" class="bannerImage">
-      </el-carousel-item>
-    </el-carousel>
-    <el-input placeholder="搜索职位" v-model="query.jobName" class="search-area input-with-select" clearable @clear="findAllJob">
-      <el-button slot="append" class="searchBtn" @click="search">搜索</el-button>
-    </el-input>
+  <div class="back">
+    <div class="index-container">
+      <el-carousel :interval="4000" type="card">
+        <el-carousel-item v-for="item in banners" :key="item.id">
+          <img :src="item.url" alt="" class="bannerImage">
+        </el-carousel-item>
+      </el-carousel>
+      <el-input placeholder="搜索职位" v-model="query.jobName" class="search-area input-with-select" clearable
+                @clear="clearSearch">
+        <el-button slot="append" class="searchBtn" @click="search">搜索</el-button>
+      </el-input>
 
-    <div class="search-condition">
-      <el-button type="text" icon="el-icon-map-location" class="location" @click="chooseCityVisible = true">
-        {{ location }} [选择城市]
-      </el-button>
+      <div class="search-condition">
+        <el-button type="text" icon="el-icon-map-location" class="location" @click="chooseCityVisible = true">
+          {{ location }} [选择城市]
+        </el-button>
 
-      <el-dropdown style="margin-left: 20px;" @command="handleSalary">
+        <el-dropdown style="margin-left: 20px;" @command="handleSalary">
         <span class="el-dropdown-link">
           薪资要求: {{ salaryRequire }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in salaryCondition" :key="item.condition" :value="item" :command="item">
-            {{ item.condition }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in salaryCondition" :key="item.condition" :value="item" :command="item">
+              {{ item.condition }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
 
-      <el-dropdown style="margin-left: 20px;" @command="handleJobType">
+        <el-dropdown style="margin-left: 20px;" @command="handleJobType">
         <span class="el-dropdown-link">
           职位类型: {{ jobTypeStr }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in jobTypes" :key="item.id" :value="item.id" :command="item">
-            {{ item.name }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in jobTypes" :key="item.id" :value="item.id" :command="item">
+              {{ item.name }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
 
-    <div class="container">
-      <el-card class="job-card box-card" v-for="item in jobs" :key="item.id" :value="item.id">
-        <div slot="header" class="clearfix">
-          <span style="color: rgb(83,191,179);font-weight: bold;">{{ item.name }} [{{ item.city }}]</span>
-          <span style="float: right;color: rgb(83,191,179);font-weight: bold;">{{ item.companyName }}</span>
-        </div>
-        <div>
-          <span style="color: #fd3333;;font-weight: bold;">{{ item.minSalary }}K-{{ item.maxSalary }}K</span><br/>
-          {{ item.desc }}
-        </div>
-        <div class="bottom clearfix">
-          <el-button type="text" class="button" style="float: right;">查看详情</el-button>
-        </div>
-      </el-card>
-    </div>
+      <div class="container">
+        <el-card class="job-card box-card" v-for="item in jobs" :key="item.id" :value="item.id">
+          <div slot="header" class="clearfix">
+            <span style="color: rgb(83,191,179);font-weight: bold;">{{ item.name }} [{{ item.city }}]</span>
+            <span style="float: right;color: rgb(83,191,179);font-weight: bold;">{{ item.companyName }}</span>
+          </div>
+          <div>
+            <span style="color: #fd3333;;font-weight: bold;">{{ item.minSalary }}K-{{ item.maxSalary }}K</span><br/>
+            {{ item.desc }}
+          </div>
+          <div class="bottom clearfix">
+            <el-button type="text" class="button" style="float: right;" @click="goInfo(item.id)">查看详情</el-button>
+          </div>
+        </el-card>
+      </div>
 
-    <el-dialog :title="'选择城市-> '+location" :visible.sync="chooseCityVisible" width="30%"
-               @close="chooseCityVisible = false">
-      <div style="height: 300px;overflow:auto;">
-        <div v-for="item in cities" :key="item.name">
-          <span style="color: rgb(83,191,179);font-weight: bold;">{{ item.name }}</span><br/>
-          <span v-for="(it,index) in item.cities" :key="it">
+      <el-dialog :title="'选择城市-> '+location" :visible.sync="chooseCityVisible" width="30%"
+                 @close="chooseCityVisible = false">
+        <div style="height: 300px;overflow:auto;">
+          <div v-for="item in cities" :key="item.name">
+            <span style="color: rgb(83,191,179);font-weight: bold;">{{ item.name }}</span><br/>
+            <span v-for="(it,index) in item.cities" :key="it">
             <el-button type="text" style="margin-right: 10px;" @click="chooseCity(it)">
             {{ it }}
           </el-button>
           <br v-if="(index+1)/13 === 1"/>
         </span>
+          </div>
         </div>
-      </div>
-    </el-dialog>
+      </el-dialog>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -77,7 +79,6 @@ export default {
   data() {
     return {
       location: '全国',
-      bannerShow: true,
       query: {
         jobName: '',
         wheres: []
@@ -90,7 +91,6 @@ export default {
         {id: 3, url: require("../../assets/images/banner3.jpg")},
       ],
       jobs: [],
-      salaryArea: {},
       salaryCondition: [
         {
           condition: '不限',
@@ -285,8 +285,7 @@ export default {
   created() {
     this.findAllJobType()
     this.findAllJob()
-  }
-  ,
+  },
   methods: {
     async findAllJobType() {
       const {data: res} = await this.$http.post('recruit/findAllJobType')
@@ -305,26 +304,22 @@ export default {
             jobNameIndex = i
           }
         }
-        this.query.wheres.splice(jobNameIndex, 1)
+        if (jobNameIndex >= 0) {
+          this.query.wheres.splice(jobNameIndex, 1)
+        }
         this.query.wheres.push({
           key: 'j.name',
           opt: 'like',
           value: '%' + this.query.jobName + '%',
           next: null
         })
-      } else {
-        let jobNameIndex = -1;
-        for (let i = 0; i < this.query.wheres.length; i++) {
-          if (this.query.wheres[i].key === 'j.name') {
-            jobNameIndex = i
-          }
-        }
-        this.query.wheres.splice(jobNameIndex, 1)
-        if (this.query.wheres[this.query.wheres.length - 1] != null) {
-          this.query.wheres[this.query.wheres.length - 1].next = null
-        }
       }
-      console.log(this.query)
+      for (let i = 0; i < this.query.wheres.length - 1; i++) {
+        this.query.wheres[i].next = 'and'
+      }
+      if (this.query.wheres[this.query.wheres.length - 1] != null) {
+        this.query.wheres[this.query.wheres.length - 1].next = null
+      }
       const {data: res} = await this.$http.post('recruit/findRecruit', this.query)
       if (res.code !== 201) return this.$message.error(res.msg)
       this.jobs = res.data.jobs
@@ -341,8 +336,13 @@ export default {
           maxIndex = i
         }
       }
-      this.query.wheres.splice(minIndex, 1)
-      this.query.wheres.splice(maxIndex, 1)
+      if (minIndex >= 0) {
+        this.query.wheres.splice(minIndex, 1)
+      }
+      if (maxIndex >= 0) {
+        this.query.wheres.splice(maxIndex, 1)
+      }
+
       if (salary.min !== 0 || salary.max !== 0) {
         this.query.wheres.push({
           key: 'min_salary',
@@ -369,7 +369,10 @@ export default {
           jobTypeIndex = i
         }
       }
-      this.query.wheres.splice(jobTypeIndex, 1)
+      if (jobTypeIndex >= 0) {
+        this.query.wheres.splice(jobTypeIndex, 1)
+      }
+
       if (jobType.id !== 0) {
         this.query.wheres.push({
           key: 'type',
@@ -389,7 +392,10 @@ export default {
           cityIndex = i
         }
       }
-      this.query.wheres.splice(cityIndex, 1)
+      if (cityIndex >= 0) {
+        this.query.wheres.splice(cityIndex, 1)
+      }
+
       if (city !== '全国') {
         this.query.wheres.push({
           key: 'j.city',
@@ -403,16 +409,34 @@ export default {
     },
     search() {
       this.findAllJob()
+    },
+    clearSearch(){
+      let companyNameIndex = -1;
+      for (let i = 0; i < this.query.wheres.length; i++) {
+        if (this.query.wheres[i].key === 'name') {
+          companyNameIndex = i
+        }
+      }
+      if (companyNameIndex >= 0) {
+        this.query.wheres.splice(companyNameIndex, 1)
+      }
+      this.findAllCompany()
+    },
+    async goInfo(id) {
+      await this.$router.push({name: 'recruitInfo', params: {id: id}})
     }
   }
 }
 </script>
 
 <style scoped lang="less">
+.back {
+  background-color: rgb(246, 246, 248);
+  height: 100%;
+  width: 100%;
+}
 
 .index-container {
-  background-color: rgb(246, 246, 248);
-  height: 20%;
   width: 70%;
   margin-top: 1%;
   margin-left: 15%;

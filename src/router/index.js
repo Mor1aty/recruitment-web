@@ -5,6 +5,9 @@ import Login from '../components/Login'
 import Register from "../components/Register"
 import Index from "../components/recruit/Index"
 import Company from "../components/recruit/Company"
+import RecruitInfo from "../components/recruit/RecruitInfo"
+import CompanyInfo from "../components/recruit/CompanyInfo"
+import CandidateInfo from "../components/user/CandidateInfo"
 
 
 Vue.use(VueRouter)
@@ -33,6 +36,20 @@ const routes = [
             {
                 path: 'company',
                 component: Company
+            },
+            {
+                path: 'candidateInfo',
+                component: CandidateInfo
+            },
+            {
+                name: 'recruitInfo',
+                path: 'recruitInfo',
+                component: RecruitInfo
+            },
+            {
+                name: 'companyInfo',
+                path: 'companyInfo',
+                component: CompanyInfo
             },
         ]
 
