@@ -13,13 +13,18 @@
         </el-button>
         <el-button v-if="!isLogin" round type="success" size="mini" class="login" @click="pushNext('/login')">登录
         </el-button>
+        <el-button v-if="!isLogin" round type="success" size="mini" class="login" @click="pushNext('/admin')">管理员登录
+        </el-button>
         <el-dropdown v-if="isLogin" @command="handleCommand" class="register">
         <span class="el-dropdown-link">
           <span>{{ this.user.info.name }} ({{ this.user.account }})</span>
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="resume">在线简历</el-dropdown-item>
+            <el-dropdown-item command="resume" v-if="type==='0'">在线简历</el-dropdown-item>
+            <el-dropdown-item command="progress" v-if="type==='0'">我的应聘</el-dropdown-item>
+            <el-dropdown-item command="companyInfo" v-if="type==='1'">公司信息</el-dropdown-item>
+            <el-dropdown-item command="companyRecruit" v-if="type==='1'">我的招聘</el-dropdown-item>
             <el-dropdown-item command="logout">注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -89,6 +94,15 @@ export default {
       }
       if (command === 'resume') {
         await this.$router.push('/home/candidateInfo')
+      }
+      if (command === 'progress') {
+        await this.$router.push('/home/myProgress')
+      }
+      if (command === 'companyInfo') {
+        await this.$router.push('/home/companyInfo')
+      }
+      if (command === 'companyRecruit') {
+        await this.$router.push('/home/companyRecruit')
       }
     },
   }

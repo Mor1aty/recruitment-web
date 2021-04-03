@@ -8,7 +8,8 @@
         <span style="color: #fa6a43;font-weight: bold;font-size: 40px;margin-left:30px;">
           {{ job.minSalary }}K-{{ job.maxSalary }}K
         </span>
-        <el-button class="startBtn" type="success" round>申请职位</el-button>
+        <el-button class="startBtn" type="success" round @click="applyJob" v-if="type==='0'&&!isApply">申请职位</el-button>
+        <el-button class="startBtn" type="success" round v-if="type==='0'&&isApply" disabled>已申请</el-button>
         <br/><br/>
         <span style="color: #b8bac1;font-weight: unset">{{ job.city }} · {{ job.typeName }}</span><br/><br/>
       </div>
@@ -31,10 +32,12 @@
         </div>
         <div>
           <span style="font-weight: bold">{{ company.name }}</span><br/><br/>
-          <i class="el-icon-map-location" style="color: rgb(93, 213, 200);margin-right: 10px;"></i>{{ company.city }}<br/>
+          <i class="el-icon-map-location" style="color: rgb(93, 213, 200);margin-right: 10px;"></i>{{
+            company.city
+          }}<br/>
           <i class="el-icon-postcard" style="color: rgb(93, 213, 200);margin-right: 10px;"></i>
           <a :href="company.website">{{ company.website }}</a><br/><br/>
-          {{company.desc}}
+          {{ company.desc }}
         </div>
       </el-card>
     </div>
@@ -47,13 +50,21 @@ export default {
   data() {
     return {
       job: {},
-      company: {}
+      company: {},
+      isApply: false,
+      type: -1,
+      user: {}
     }
   },
   created() {
+    this.getUserInfo()
     this.getRecruitInfo()
   },
   methods: {
+    getUserInfo() {
+      this.user = JSON.parse(window.sessionStorage.getItem('user'))
+      this.type = window.sessionStorage.getItem('type')
+    },
     async getRecruitInfo() {
       let jobParam = {
         wheres: [
@@ -79,7 +90,26 @@ export default {
       const {data: res1} = await this.$http.post('recruit/findCompany', companyParam)
       if (res1.code !== 201) return this.$message.error(res.msg)
       this.company = res1.data.companies[0]
+
+      if (this.type === '0') {
+        const {data: res2} = await this.$http.post('recruit/findJobProgress', {
+          job: this.$route.params.id
+        })
+        if (res2.code !== 201) return this.$message.error(res.msg)
+        if (res2.data !== null) {
+          this.isApply = true
+        }
+      }
+
     },
+    async applyJob() {
+      const {data: res} = await this.$http.post('recruit/chooseJob', {
+        job: this.$route.params.id
+      })
+      if (res.code !== 200) return this.$message.error(res.msg)
+      this.$message.success('申请成功')
+      this.isApply = true
+    }
   }
 }
 </script>

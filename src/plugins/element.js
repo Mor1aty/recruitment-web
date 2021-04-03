@@ -24,7 +24,16 @@ import {
     Dropdown,
     DropdownItem,
     DropdownMenu,
-    Dialog
+    Dialog,
+    MessageBox,
+    Aside,
+    Submenu,
+    Main,
+    Breadcrumb,
+    BreadcrumbItem,
+    Table,
+    TableColumn,
+    Pagination
 } from 'element-ui'
 
 Vue.use(Button)
@@ -51,5 +60,14 @@ Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Dialog)
+Vue.use(Aside)
+Vue.use(Submenu)
+Vue.use(Main)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
 
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm

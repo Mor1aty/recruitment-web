@@ -8,6 +8,17 @@ import Company from "../components/recruit/Company"
 import RecruitInfo from "../components/recruit/RecruitInfo"
 import CompanyInfo from "../components/recruit/CompanyInfo"
 import CandidateInfo from "../components/user/CandidateInfo"
+import MyProgress from "../components/user/MyProgress"
+import MyCompanyInfo from "../components/user/CompanyInfo"
+import CompanyRecruit from "../components/user/CompanyRecruit"
+import CompanyRecruitInfo from "../components/user/CompanyRecruitInfo"
+import CompanyCandidateInfo from "../components/user/CompanyCandidateInfo"
+import AdminLogin from "../components/admin/AdminLogin"
+import AdminHome from "../components/admin/AdminHome"
+import AdminCandidate from "../components/admin/AdminCandidate"
+import AdminCompany from "../components/admin/AdminCompany"
+import AdminRecruit from "../components/admin/AdminRecruit"
+import AdminJobType from "../components/admin/AdminJobType"
 
 
 Vue.use(VueRouter)
@@ -42,6 +53,28 @@ const routes = [
                 component: CandidateInfo
             },
             {
+                path: 'myProgress',
+                component: MyProgress
+            },
+            {
+                path: 'companyInfo',
+                component: MyCompanyInfo
+            },
+            {
+                path: 'companyRecruit',
+                component: CompanyRecruit
+            },
+            {
+                name: 'companyRecruitInfo',
+                path: 'companyRecruitInfo',
+                component: CompanyRecruitInfo
+            },
+            {
+                name: 'companyCandidateInfo',
+                path: 'companyCandidateInfo',
+                component: CompanyCandidateInfo
+            },
+            {
                 name: 'recruitInfo',
                 path: 'recruitInfo',
                 component: RecruitInfo
@@ -52,10 +85,33 @@ const routes = [
                 component: CompanyInfo
             },
         ]
-
-
+    },
+    {
+        path: '/admin',
+        component: AdminLogin
+    },
+    {
+        path: '/admin-home',
+        component: AdminHome,
+        children: [
+            {
+                path: 'candidate',
+                component: AdminCandidate
+            },
+            {
+                path: 'company',
+                component: AdminCompany
+            },
+            {
+                path: 'recruit',
+                component: AdminRecruit
+            },
+            {
+                path: 'jobType',
+                component: AdminJobType
+            }
+        ]
     }
-
 ]
 
 const router = new VueRouter({
